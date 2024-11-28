@@ -22,13 +22,11 @@ public class reconhecimento {
     }
 
     private void criarGUI() {
-        // Configuração da janela principal
         janela = new JFrame("App de Processamento de Áudio");
         janela.setSize(400, 300);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setLayout(new CardLayout());
 
-        // Tela Inicial
         telaInicial = new JPanel();
         telaInicial.setLayout(new BoxLayout(telaInicial, BoxLayout.Y_AXIS));
 
@@ -43,7 +41,6 @@ public class reconhecimento {
         botaoAvancar.addActionListener(e -> avancarParaPrincipal());
         telaInicial.add(botaoAvancar);
 
-        // Tela Principal
         telaPrincipal = new JPanel();
         telaPrincipal.setLayout(new BoxLayout(telaPrincipal, BoxLayout.Y_AXIS));
 
@@ -72,26 +69,22 @@ public class reconhecimento {
         telaPrincipal.add(Box.createRigidArea(new Dimension(0, 20)));
         telaPrincipal.add(resultado);
 
-        // Adiciona as telas à janela
         janela.add(telaInicial, "Tela Inicial");
         janela.add(telaPrincipal, "Tela Principal");
 
-        // Exibe a janela com a tela inicial
         janela.setVisible(true);
     }
 
     private void avancarParaPrincipal() {
-        // Troca para a tela principal
         CardLayout cl = (CardLayout) janela.getContentPane().getLayout();
         cl.show(janela.getContentPane(), "Tela Principal");
     }
 
     private void pegarAudio() {
-        String modelPath = "src/main/resources/model"; // Substitua pelo caminho do modelo
+        String modelPath = "src/main/resources/model";
         AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
-        // SwingWorker para processar áudio em segundo plano
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() {
@@ -108,12 +101,10 @@ public class reconhecimento {
                         while (true) {
                             int bytesRead = line.read(buffer, 0, buffer.length);
                             if (recognizer.acceptWaveForm(buffer, bytesRead)) {
-                                // Texto completo reconhecido
                                 String result = recognizer.getResult();
                                 publish("Texto reconhecido: " + result);
-                                break; // Encerra o reconhecimento após o texto completo
+                                break; 
                             } else {
-                                // Atualização com resultados parciais
                                 String partial = recognizer.getPartialResult();
                                 publish("Texto parcial: " + partial);
                             }
@@ -129,7 +120,6 @@ public class reconhecimento {
 
             @Override
             protected void process(java.util.List<String> chunks) {
-                // Atualiza a interface gráfica com resultados parciais
                 for (String chunk : chunks) {
                     resultado.setText("<html>" + chunk.replace("\n", "<br>") + "</html>");
                 }
@@ -138,7 +128,6 @@ public class reconhecimento {
     }
 
     private void carregarArquivoAudio() {
-        // Abre uma janela de seleção de arquivo
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos de Áudio", "mp3", "wav");
         fileChooser.setFileFilter(filter);
@@ -148,13 +137,11 @@ public class reconhecimento {
             File arquivo = fileChooser.getSelectedFile();
             resultado.setText("Carregando áudio: " + arquivo.getAbsolutePath());
 
-            // SwingWorker para processar o arquivo em segundo plano
             new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() {
-                    // Simula processamento do arquivo
                     try {
-                        Thread.sleep(2000); // Exemplo de espera para processar
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         Thread.currentThread().interrupt();
                     }
@@ -174,11 +161,8 @@ public class reconhecimento {
     public String startRecognition() {
         class Reconhecimento {
 
-            // Outros métodos e atributos...
 
             public String startRecognition() {
-                // Aqui você deve implementar o código de reconhecimento
-                // Exemplo de retorno estático para testar:
                 return "Texto reconhecido do áudio.";
             }
         }
