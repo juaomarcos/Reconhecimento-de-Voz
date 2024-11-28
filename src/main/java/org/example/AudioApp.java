@@ -25,13 +25,11 @@ public class AudioApp {
 
 
     private void criarGUI() {
-        // Configuração da janela principal
         janela = new JFrame("App de Processamento de Áudio");
         janela.setSize(400, 300);
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setLayout(new CardLayout());
 
-        // Tela Inicial
         telaInicial = new JPanel();
         telaInicial.setLayout(new BoxLayout(telaInicial, BoxLayout.Y_AXIS));
 
@@ -46,7 +44,6 @@ public class AudioApp {
         botaoAvancar.addActionListener(e -> avancarParaPrincipal());
         telaInicial.add(botaoAvancar);
 
-        // Tela Principal
         telaPrincipal = new JPanel();
         telaPrincipal.setLayout(new BoxLayout(telaPrincipal, BoxLayout.Y_AXIS));
 
@@ -72,26 +69,22 @@ public class AudioApp {
         telaPrincipal.add(Box.createRigidArea(new Dimension(0, 20)));
         telaPrincipal.add(resultado);
 
-        // Adiciona as telas à janela
         janela.add(telaInicial, "Tela Inicial");
         janela.add(telaPrincipal, "Tela Principal");
 
-        // Exibe a janela com a tela inicial
         janela.setVisible(true);
     }
 
     private void avancarParaPrincipal() {
-        // Troca para a tela principal
         CardLayout cl = (CardLayout) janela.getContentPane().getLayout();
         cl.show(janela.getContentPane(), "Tela Principal");
     }
 
     private void pegarAudio() {
-        String modelPath = "src/main/resources/model"; // Substitua pelo caminho do modelo
+        String modelPath = "src/main/resources/model";
         AudioFormat format = new AudioFormat(16000, 16, 1, true, false);
         DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 
-        // Executar a captura de áudio em uma nova thread para evitar travar a interface gráfica
         new Thread(() -> {
             try (TargetDataLine line = (TargetDataLine) AudioSystem.getLine(info)) {
                 line.open(format);
@@ -108,7 +101,7 @@ public class AudioApp {
                         if (recognizer.acceptWaveForm(buffer, bytesRead)) {
                             String result = recognizer.getResult();
                             SwingUtilities.invokeLater(() -> resultado.setText("<html>" + result.replace("\n", "<br>") + "</html>"));
-                            break; // Reconhecimento concluído, sair do loop
+                            break;
                         } else {
                             String partial = recognizer.getPartialResult();
                             SwingUtilities.invokeLater(() -> resultado.setText("<html>" + partial.replace("\n", "<br>") + "</html>"));
@@ -124,7 +117,6 @@ public class AudioApp {
     }
 
     private void carregarArquivoAudio() {
-        // Abre uma janela de seleção de arquivo
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivos de Áudio", "mp3", "wav");
         fileChooser.setFileFilter(filter);
@@ -132,7 +124,6 @@ public class AudioApp {
 
         if (resultadoEscolha == JFileChooser.APPROVE_OPTION) {
             File arquivo = fileChooser.getSelectedFile();
-            // Aqui você pode implementar o código para processar o áudio
             resultado.setText("Áudio carregado: " + arquivo.getAbsolutePath() + "\nFunção para processar áudio em desenvolvimento.");
         } else {
             resultado.setText("Nenhum arquivo carregado.");
