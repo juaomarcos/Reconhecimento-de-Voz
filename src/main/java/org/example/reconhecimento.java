@@ -14,7 +14,6 @@ import java.io.IOException;
 public class reconhecimento {
 
     private JFrame janela;
-    private JPanel telaInicial, telaPrincipal;
     private JLabel resultado;
 
     public static void main(String[] args) {
@@ -27,7 +26,7 @@ public class reconhecimento {
         janela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         janela.setLayout(new CardLayout());
 
-        telaInicial = new JPanel();
+        JPanel telaInicial = new JPanel();
         telaInicial.setLayout(new BoxLayout(telaInicial, BoxLayout.Y_AXIS));
 
         JLabel tituloInicial = new JLabel("Bem-vindo ao App");
@@ -41,7 +40,7 @@ public class reconhecimento {
         botaoAvancar.addActionListener(e -> avancarParaPrincipal());
         telaInicial.add(botaoAvancar);
 
-        telaPrincipal = new JPanel();
+        JPanel telaPrincipal = new JPanel();
         telaPrincipal.setLayout(new BoxLayout(telaPrincipal, BoxLayout.Y_AXIS));
 
         JLabel tituloPrincipal = new JLabel("");
@@ -103,7 +102,7 @@ public class reconhecimento {
                             if (recognizer.acceptWaveForm(buffer, bytesRead)) {
                                 String result = recognizer.getResult();
                                 publish("Texto reconhecido: " + result);
-                                break; 
+                                break;
                             } else {
                                 String partial = recognizer.getPartialResult();
                                 publish("Texto parcial: " + partial);
@@ -158,14 +157,4 @@ public class reconhecimento {
         }
     }
 
-    public String startRecognition() {
-        class Reconhecimento {
-
-
-            public String startRecognition() {
-                return "Texto reconhecido do áudio.";
-            }
-        }
-        return "asdsdasd";
-    }
 }
